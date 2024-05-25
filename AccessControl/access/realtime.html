@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Access Logs</title>
+</head>
+<body>
+    <h1>Access Logs in Real Time</h1>
+    <ul id="logs"></ul>
+    <script>
+        const logs = document.getElementById('logs');
+        const ws = new WebSocket('ws://' + window.location.host + '/ws/access_logs/');
+
+        ws.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            const logItem = document.createElement('li');
+            logItem.textContent = `${data.message.timestamp}: ${data.message.person} ${data.message.action}ed door ${data.message.door} (Access granted: ${data.message.access_granted})`;
+            logs.appendChild(logItem);
+        };
+    </script>
+</body>
+</html>
